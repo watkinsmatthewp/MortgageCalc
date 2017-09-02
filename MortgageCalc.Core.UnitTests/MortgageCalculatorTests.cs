@@ -4,6 +4,7 @@ using Xunit;
 
 namespace MortgageCalc.Core.UnitTests
 {
+    // Modeled from http://www.bretwhissel.net/cgi-bin/amortize
     public class MortgageCalculatorTests
     {
         [Fact]
@@ -24,8 +25,28 @@ namespace MortgageCalc.Core.UnitTests
             Assert.Equal(30, result.AmortizationSchedule.YearlySummaries.Count);
             Assert.Equal(360, result.AmortizationSchedule.MonthlyPayments.Count);
 
+            // Spot check first month
+            var firstMonthPayment = result.AmortizationSchedule.MonthlyPayments[0];
+            Assert.Equal(381.93m, firstMonthPayment.PrincipalAndInterest);
+            Assert.Equal(266.67m, firstMonthPayment.Interest);
+            Assert.Equal(115.26m, firstMonthPayment.Principal);
+
+            // Spot check first year
+            var firstYearSummary = result.AmortizationSchedule.YearlySummaries[0];
+            Assert.Equal(1408.8m, firstYearSummary.Principal);
+            Assert.Equal(3174.36m, firstYearSummary.Interest);
+
+            // Spot check final month
+            var lastMonthPayment = result.AmortizationSchedule.MonthlyPayments[359];
+            Assert.Equal(382.20m, lastMonthPayment.Principal);
+            Assert.Equal(1.27m, lastMonthPayment.Interest);
+
+            // Make sure the balances at the end are right
+            var finalCumulativePaymentInfo = result.AmortizationSchedule.MonthlyCumulativePaymentAmounts[359];
+            Assert.Equal(80000m, finalCumulativePaymentInfo.Principal);
+            Assert.Equal(57496.34m, finalCumulativePaymentInfo.Interest);
+            Assert.Equal(36000m, finalCumulativePaymentInfo.Escrow);
             Assert.Equal(0, result.RemainingPrincipal);
-            
         }
     }
 }

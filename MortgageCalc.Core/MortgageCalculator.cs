@@ -20,7 +20,7 @@ namespace MortgageCalc.Core
             var termsToIterate = Math.Min(request.TermMonths, request.StopAfterMonths);
             for (var termMonth = 0; termMonth < termsToIterate; termMonth++)
             {
-                // Calculate this month's payment and add it to the list of payments in the amortization schedule
+                // Calculate this month's payment and add it to the list of payments in the amortization schedule (banker's rounding)
                 var interest = Math.Round(response.RemainingPrincipal * request.MonthlyInterestRate, 2, MidpointRounding.ToEven);
                 var thisMonthPayment = new MortgagePaymentBreakdown
                 {
@@ -29,6 +29,18 @@ namespace MortgageCalc.Core
                     Interest = interest,
                     Principal = Math.Min(response.PrincipalAndInterest - interest, response.RemainingPrincipal),
                 };
+
+                // Decrement the remining principal by the paid principal
+                response.RemainingPrincipal -= thisMonthPayment.Principal;
+
+                // If the last month, finish off
+                if (termMonth == termsToIterate - 1)
+                {
+                    thisMonthPayment.Principal += response.RemainingPrincipal;
+                    response.RemainingPrincipal = 0;
+                }
+
+                // Add a new record for the monthly payment
                 response.AmortizationSchedule.MonthlyPayments.Add(thisMonthPayment);
 
                 // Add a new record for the monthly cumulative totals
@@ -39,16 +51,12 @@ namespace MortgageCalc.Core
                 }
 
                 // Increment the year summary for this payment
-                var termYear = termMonth / request.TermMonths;
+                var termYear = termMonth / 12;
                 if (termMonth % 12 == 0)
                 {
                     response.AmortizationSchedule.YearlySummaries.Add(new MortgagePaymentBreakdown());
                 }
-                var yearSummary = response.AmortizationSchedule.YearlySummaries[termYear];
-                yearSummary += thisMonthPayment;
-
-                // Decrement the remining principal by the paid principal
-                response.RemainingPrincipal -= thisMonthPayment.Principal;
+                response.AmortizationSchedule.YearlySummaries[termYear] += thisMonthPayment;
             }
 
             return response;
