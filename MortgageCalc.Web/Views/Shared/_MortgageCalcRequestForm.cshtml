@@ -1,0 +1,36 @@
+﻿@using MortgageCalc.Core.Models;
+
+@model MortgageCalcRequest
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.HomePrice)
+        @Html.TextBoxFor(m => m.HomePrice, new { @class="form-control", placeholder = "ex. 300000" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DownPayment)
+        @Html.TextBoxFor(m => m.DownPayment, new { @class = "form-control", placeholder = "ex. 60000" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AnnualInterestRate)
+        @Html.TextBoxFor(m => m.AnnualInterestRate, new { @class = "form-control", placeholder = "ex. .04" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Escrow)
+        @Html.TextBoxFor(m => m.Escrow, new { @class = "form-control", placeholder = "ex. 300" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PMI)
+        @Html.TextBoxFor(m => m.PMI, new { @class = "form-control", placeholder = "ex. 50" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.TermMonths)
+        @Html.TextBoxFor(m => m.TermMonths, new { @class = "form-control", placeholder = "ex. 50" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.StopAfterMonths)
+        @Html.TextBoxFor(m => m.StopAfterMonths, new { @class = "form-control", placeholder = "ex. 60" })
+    </div>
+    <button type="submit" class="btn btn-primary">Calculate</button>
+}

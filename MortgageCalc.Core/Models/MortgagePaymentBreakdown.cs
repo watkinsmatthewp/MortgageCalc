@@ -14,6 +14,7 @@ namespace MortgageCalc.Core.Models
 
         public decimal PrincipalAndInterest => Principal + Interest;
         public decimal Total => PrincipalAndInterest + Escrow + PMI;
+        public decimal Rent => Total - Principal;
 
         public MortgagePaymentBreakdown Copy()
         {

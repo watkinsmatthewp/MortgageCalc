@@ -13,7 +13,7 @@ namespace MortgageCalc.Core.Models
         public decimal AnnualInterestRate { get; set; }
         public decimal DownPayment { get; set; }
         public int TermMonths { get; set; }
-        public int StopAfterMonths { get; set; } = int.MaxValue;
+        public int StopAfterMonths { get; set; }
         public decimal InitialPrincipal => HomePrice - DownPayment;
         public decimal MonthlyInterestRate => AnnualInterestRate / 12;
     }

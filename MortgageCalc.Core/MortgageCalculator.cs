@@ -17,7 +17,7 @@ namespace MortgageCalc.Core
             };
 
             var pmiPrincipalThreshold = .8m * request.HomePrice;
-            var termsToIterate = Math.Min(request.TermMonths, request.StopAfterMonths);
+            var termsToIterate = request.StopAfterMonths < 1 ? request.TermMonths : request.StopAfterMonths;
             for (var termMonth = 0; termMonth < termsToIterate; termMonth++)
             {
                 // Calculate this month's payment and add it to the list of payments in the amortization schedule (banker's rounding)
@@ -34,7 +34,7 @@ namespace MortgageCalc.Core
                 response.RemainingPrincipal -= thisMonthPayment.Principal;
 
                 // If the last month, finish off
-                if (termMonth == termsToIterate - 1)
+                if (termMonth == request.TermMonths - 1)
                 {
                     thisMonthPayment.Principal += response.RemainingPrincipal;
                     response.RemainingPrincipal = 0;

@@ -15,7 +15,10 @@ namespace MortgageCalc.Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(null as MortgageCalcResponse);
+            return View(new MortgageCalcActionResult
+            {
+                Request = new MortgageCalcRequest()
+            });
         }
 
         [HttpPost]

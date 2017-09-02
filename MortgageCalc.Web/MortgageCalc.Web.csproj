@@ -11,6 +11,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="bower.json" />
+    <Content Remove="Views\Shared\_MortgageCalcResponseTable.cshtml" />
+    <Content Remove="wwwroot\css\site.css" />
+    <Content Remove="wwwroot\css\site.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".bowerrc" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
   </ItemGroup>
 
@@ -20,6 +31,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MortgageCalc.Core\MortgageCalc.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\site.css" />
   </ItemGroup>
 
 </Project>

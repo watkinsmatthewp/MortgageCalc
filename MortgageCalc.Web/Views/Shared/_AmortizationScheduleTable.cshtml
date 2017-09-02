@@ -1,0 +1,67 @@
+﻿@using MortgageCalc.Core.Models;
+
+@model AmortizationSchedule
+
+@{
+    var anyPMI = Model.MonthlyPayments[0].PMI > 0;
+}
+
+<table class="table table-bordered table-sm table-hover table-responsive">
+    <thead>
+        <tr>
+            <th>Year</th>
+            <th>Month</th>
+
+            <th>Principal</th>
+            <th>Interest</th>
+            <th>Escrow</th>
+            @if (anyPMI)
+            {
+                <th>PMI</th>
+            }
+            <th>Total</th>
+            <th>"Rent"</th>
+
+            <th>Cum. Principal</th>
+            <th>Cum. Interest</th>
+            <th>Cum. Escrow</th>
+            @if (anyPMI)
+            {
+                <th>Cum. PMI</th>
+            }
+            <th>Cum. Total</th>
+            <th>Cum. "Rent"</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (var monthIdx = 0; monthIdx < Model.MonthlyPayments.Count; monthIdx++)
+        {
+            var monthPayment = Model.MonthlyPayments[monthIdx];
+            var monthCumulativeSummary = Model.MonthlyCumulativePaymentAmounts[monthIdx];
+            <tr>
+                <td>@((monthIdx / 12) + 1)</td>
+                <td>@((monthIdx % 12) + 1)</td>
+
+                <td>@monthPayment.Principal</td>
+                <td>@monthPayment.Interest</td>
+                <td>@monthPayment.Escrow</td>
+                @if (anyPMI)
+                {
+                    <td>@monthPayment.PMI</td>
+                }
+                <td>@monthPayment.Total</td>
+                <td>@monthPayment.Rent</td>
+
+                <td>@monthCumulativeSummary.Principal</td>
+                <td>@monthCumulativeSummary.Interest</td>
+                <td>@monthCumulativeSummary.Escrow</td>
+                @if (anyPMI)
+                {
+                    <td>@monthCumulativeSummary.PMI</td>
+                }
+                <td>@monthCumulativeSummary.Total</td>
+                <td>@monthCumulativeSummary.Rent</td>
+            </tr>
+        }
+    </tbody>
+</table>

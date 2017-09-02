@@ -1,6 +1,62 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using MortgageCalc.Core.Models;
+
+@{
+    ViewData["Title"] = "Home";
 }
 
 @model MortgageCalcActionResult
 
+<h4>Settings</h4>
+<div class="card">
+    <div class="card-body">
+        @Html.Partial("_MortgageCalcRequestForm", Model.Request)
+    </div>
+</div>
+
+@if (Model.Response != null)
+{
+    var cumulativeSummary = Model.Response.AmortizationSchedule.MonthlyCumulativePaymentAmounts.Last();
+    <h4 style="margin-top: 1em;">Summary</h4>
+
+    <table class="table table-bordered table-sm table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>Min. Payment</th>
+                <th>Cum. Principal</th>
+                <th>Cum. Interest</th>
+                <th>Cum. Escrow</th>
+                @if (cumulativeSummary.PMI > 0)
+                {
+                    <th>Cum. PMI</th>
+                }
+                <th>Cum. Total</th>
+                <th>Cum. "Rent"</th>
+                @if (Model.Response.RemainingPrincipal > 0)
+                {
+                    <th>Rem. Principal</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Response.PrincipalAndInterest</td>
+                <td>@cumulativeSummary.Principal</td>
+                <td>@cumulativeSummary.Interest</td>
+                <td>@cumulativeSummary.Escrow</td>
+                @if (cumulativeSummary.PMI > 0)
+                {
+                    <td>@cumulativeSummary.PMI</td>
+                }
+                <td>@cumulativeSummary.Total</td>
+                <td>@cumulativeSummary.Rent</td>
+                @if (Model.Response.RemainingPrincipal > 0)
+                {
+                    <td>@Model.Response.RemainingPrincipal</td>
+                }
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>Amortization Schedule</h4>
+    @Html.Partial("_AmortizationScheduleTable", Model.Response.AmortizationSchedule)
+}
