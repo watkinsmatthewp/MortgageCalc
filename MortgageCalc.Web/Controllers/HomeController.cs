@@ -24,6 +24,10 @@ namespace MortgageCalc.Web.Controllers
         [HttpPost]
         public IActionResult Index(MortgageCalcRequest request)
         {
+            if (request.AnnualInterestRate > 1)
+            {
+                request.AnnualInterestRate /= 100m;
+            }
             return View(new MortgageCalcActionResult
             {
                 Request = request,

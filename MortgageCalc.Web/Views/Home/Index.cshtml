@@ -15,13 +15,15 @@
 
 @if (Model.Response != null)
 {
+    var firstMonth = Model.Response.AmortizationSchedule.MonthlyPayments[0];
     var cumulativeSummary = Model.Response.AmortizationSchedule.MonthlyCumulativePaymentAmounts.Last();
     <h4 style="margin-top: 1em;">Summary</h4>
 
     <table class="table table-bordered table-sm table-hover table-responsive">
         <thead>
             <tr>
-                <th>Min. Payment</th>
+                <th>Monthly P&I</th>
+                <th>Monthly Total</th>
                 <th>Cum. Principal</th>
                 <th>Cum. Interest</th>
                 <th>Cum. Escrow</th>
@@ -40,6 +42,7 @@
         <tbody>
             <tr>
                 <td>@Model.Response.PrincipalAndInterest</td>
+                <td>@firstMonth.Total</td>
                 <td>@cumulativeSummary.Principal</td>
                 <td>@cumulativeSummary.Interest</td>
                 <td>@cumulativeSummary.Escrow</td>
